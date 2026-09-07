@@ -1,5 +1,5 @@
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent, type SubmitEvent } from 'react'
 import { NavLink, useLocation, type NavLinkRenderProps } from 'react-router-dom'
 import { useAppStore } from '../stores/useAppStore'
 
@@ -7,20 +7,52 @@ import { useAppStore } from '../stores/useAppStore'
 export default function Header() {
 
 
+    const [searchFilters, setSearchFilters] = useState({
+
+        ingredient: '',
+        category: ''
+
+    })
+
     const getLinkStyle = ({isActive}:NavLinkRenderProps): string => (isActive ? 'text-orange-500' : 'text-white')
 
     const {pathname} = useLocation()
     const isHome = useMemo(()=> pathname==='/',[pathname])
 
     const fetchCategories = useAppStore((state)=> state.fetchCategories)
+    const fetchRecipe = useAppStore((state)=> state.fetchRecipe)
 
     const categories = useAppStore((state)=>state.categories)
-    console.log('HERE',categories)
     useEffect(()=>{
 
         fetchCategories()
         
     },[])
+
+    const handleChange = (e : ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>)=>{
+
+        setSearchFilters({
+            ...searchFilters,
+            [e.target.name] : e.target.value
+        })
+
+    }
+
+    const handleSubmit = (e: SubmitEvent<HTMLFormElement>) =>{
+
+        e.preventDefault()
+
+        if(Object.values(searchFilters).includes('')){
+
+            console.log('Todos los campos son obligatorios.')
+            return 
+
+        }
+
+
+        fetchRecipe(searchFilters)
+
+    }
 
     return (
         
@@ -60,7 +92,7 @@ export default function Header() {
 
                 {isHome && (
                     <form 
-                        action=""
+                        onSubmit={handleSubmit}
                         className='md:w-1/2 2xl:w-1/3 bg-orange-400 my-10 p-10 rounded-lg space-y-4'
                     >
                         <div className='space-y-4'>
@@ -77,6 +109,8 @@ export default function Header() {
                                 name='ingredient'
                                 className='p-3 w-full rounded-lg focus:outline-none bg-white'
                                 placeholder='Nombre o ingrediente'
+                                onChange={handleChange}
+                                value={searchFilters.ingredient}
                             />
 
                         </div>
@@ -93,12 +127,15 @@ export default function Header() {
                                 name="category" 
                                 id="category"
                                 className='p-3 w-full rounded-lg focus:outline-none bg-white'
+                                onChange={handleChange}
+                                value={searchFilters.category}
                             >
                                 <option value="">--- Seleccione ---</option>
 
                                 {categories.drinks.map((category)=>(
                                     <option
                                         key={category.strCategory}
+                                        value={category.strCategory}
                                     >
                                         {category.strCategory}
                                     </option>
