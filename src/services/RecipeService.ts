@@ -45,5 +45,7 @@ export async function getDrinkById(id: Recipe['idDrink']) {
 
     const result = DrinkByIdApiSchema.safeParse(data.drinks[0])
 
-    console.log('CONSULTANDO API BY ID ',result)
+    if(result.success){
+        return result.data
+    }
 }

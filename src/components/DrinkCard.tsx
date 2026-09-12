@@ -1,4 +1,3 @@
-import type { MouseEvent } from "react"
 import type { Recipe } from "../types"
 import { useAppStore } from "../stores/useAppStore"
 

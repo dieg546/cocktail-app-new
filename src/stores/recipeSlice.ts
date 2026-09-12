@@ -1,6 +1,6 @@
 import type { StateCreator } from "zustand"
 import { getCategories, getDrinkById, getRecipes } from "../services/RecipeService"
-import type { Categories, Recipe, RecipesFromApi, SearchFilter } from "../types"
+import type { Categories, DrinkById, Recipe, RecipesFromApi, SearchFilter } from "../types"
 
 // type Category = {}
 
@@ -8,9 +8,12 @@ export type RecipesSliceType = {
 
     categories: Categories,
     Recipes: RecipesFromApi,
+    drink: DrinkById,
+    modal: boolean,
     fetchCategories: () => Promise<void>,
     fetchRecipe: (searchFilters : SearchFilter) => Promise<void>,
     fetchDrinkById: (id: Recipe['idDrink']) => Promise<void>
+    closeModal: () => void
 
 }
 
@@ -23,6 +26,10 @@ export const createRecipeSlice : StateCreator<RecipesSliceType> = (set)=>({
     Recipes:{
         drinks: []
     },
+
+    drink:{} as DrinkById,
+
+    modal: false,
 
     fetchCategories: async ()=>{
 
@@ -49,6 +56,24 @@ export const createRecipeSlice : StateCreator<RecipesSliceType> = (set)=>({
     fetchDrinkById: async(id)=>{
 
         const fetchDrink = await getDrinkById(id)
+
+        console.log('Drink by ID ',fetchDrink)
+
+        set({
+            drink: fetchDrink,
+            modal: true
+        })
+
+    },
+
+    closeModal: ()=>{
+
+        console.log("Cerrando modal")
+
+        set({
+            modal:false,
+            drink: {} as DrinkById
+        })
 
     }
 
