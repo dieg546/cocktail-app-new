@@ -19,10 +19,15 @@ export default function Header() {
     const {pathname} = useLocation()
     const isHome = useMemo(()=> pathname==='/',[pathname])
 
+    //Recipes
     const fetchCategories = useAppStore((state)=> state.fetchCategories)
     const fetchRecipe = useAppStore((state)=> state.fetchRecipe)
-
     const categories = useAppStore((state)=>state.categories)
+
+    //Notification
+
+    const displayNotification = useAppStore((state) => state.displayNotificacion)
+
     useEffect(()=>{
 
         fetchCategories()
@@ -44,7 +49,12 @@ export default function Header() {
 
         if(Object.values(searchFilters).includes('')){
 
-            console.log('Todos los campos son obligatorios.')
+            displayNotification({
+                text:'Todos los campos son obligatorios',
+                error:true,
+                show:true
+            })
+            
             return 
 
         }

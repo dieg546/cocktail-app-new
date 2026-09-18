@@ -14,6 +14,11 @@ export default function Modal() {
     const favorites = useAppStore((state)=> state.favorites) 
     const addToFavorites = useAppStore((state)=> state.addToFavorites)
     const removeFromFavorites = useAppStore((state)=>state.removeFromFavorites)
+
+    //NotificationSlice
+
+    const displayNotification = useAppStore((state)=> state.displayNotificacion)
+    const notification = useAppStore((state)=> state.notification)
     
     const existsInFavorites = favorites.some( favorite => favorite.idDrink === drink.idDrink)
 
@@ -29,7 +34,7 @@ export default function Modal() {
             if(ingridient && measure){
 
                 ingridients.push(
-                    <li>
+                    <li key={index}>
                         {ingridient} - {measure}
                     </li>
                 )
@@ -109,22 +114,32 @@ export default function Modal() {
                                     type='button'
                                     className='w-full rounded bg-amber-600 p-3 font-bold 
                                     uppercase text-white shadow hover:bg-amber-800 cursor-pointer'
-                                    onClick={()=>removeFromFavorites(drink.idDrink)}
+                                    onClick={()=>{
+                                        removeFromFavorites(drink.idDrink) 
+                                        closeModal()
+                                        displayNotification(
+                                            {text:'Se ha quitado de favoritos',error:false, show: true}
+                                        )
+                                    }}
                                 >
-                                    quitar de favoritos
+                                    Quitar de favoritos
                                 </button>
                             ):(
                                 <button
                                     type='button'
                                     className='w-full rounded bg-amber-600 p-3 font-bold 
                                     uppercase text-white shadow hover:bg-amber-800 cursor-pointer'
-                                    onClick={()=>addToFavorites(drink)}
+                                    onClick={()=>{
+                                        addToFavorites(drink)
+                                        closeModal()
+                                        displayNotification(
+                                            {text:'Se ha agregado a favoritos',error: false ,show:true}
+                                        )
+                                    }}
                                 >
                                     Agregar a favoritos
                                 </button>
                             )}
-
-                            
 
                         </div>
 

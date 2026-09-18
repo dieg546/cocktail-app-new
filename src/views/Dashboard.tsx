@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import Header from "../components/Header";
 import { useAppStore } from "../stores/useAppStore";
 import DrinkCard from "../components/DrinkCard";
 
