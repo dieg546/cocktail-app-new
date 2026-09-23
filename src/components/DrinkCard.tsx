@@ -10,8 +10,7 @@ type DrinkCardTypesProps={
 export default function DrinkCard({drink}: DrinkCardTypesProps) {
 
     const fetchDrinkById = useAppStore((state)=> state.fetchDrinkById)
-    // const showOffNotification
-
+    
     const getDrink = (id: Recipe['idDrink'])=>{
         
         fetchDrinkById(id)

@@ -96,6 +96,13 @@ export default function Header() {
                             Favoritos
                         </NavLink>
 
+                        <NavLink
+                            to="/generative-ai"
+                            className={getLinkStyle}
+                        >
+                            IA Generativa
+                        </NavLink>
+
                     </nav>
 
                 </div>
